@@ -5,7 +5,7 @@
 
 var dmUpdateImplError = function(message) {
     this.message = message;
-    this.name = "Command 'create_entity' implementation error";
+    this.name = "Command 'update_entity' implementation error";
 }
 dmUpdateImplError.prototype = Object.create(Error.prototype);
 dmUpdateImplError.prototype.constructor = dmUpdateImplError;
@@ -20,9 +20,9 @@ var impl = function(data, params){
 }
 
 module.exports =  {
-    name: "update_entity",
+    name: "dml.update",
     synonims: {
-        "update_entity": "update_entity"
+        "dml.update": "dml.update"
     },
 
     "internal aliases":{
@@ -64,17 +64,24 @@ module.exports =  {
     },
 
     help: {
-        synopsis: "Save context into cache",
+        synopsis: "Update entity collection",
         name: {
-            "default": "cache",
-            synonims: ["cache","save"]
+            "default": "dml.update",
         },
-        "default param": "none",
-        params: [],
+        input: ["waterline entity description"],
+        output: "json",
+        "default param": "collection",
+        params: [{
+            name: "collection",
+            synopsis: "Collection name. Retuns message about error when entity collection is not available",
+            type: ["string"],
+            synonims: ["collection","object","entity"],
+            "default value": "undefined"
+        }],
         example: {
-            description: "Save context into cache",
-            code: "load(\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\n    as:'json'\n)\nselect('$.metadata')\nextend()\ntranslate()\ncache()\nselect(\"$.data_id\")\n"
+            description: "Update entity collection",
+            code: "update()"
         }
 
     }
-} 
+}

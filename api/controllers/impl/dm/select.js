@@ -127,17 +127,24 @@ module.exports =  {
     },
 
     help: {
-        synopsis: "Save context into cache",
+        synopsis: "Query for choose entity collection",
         name: {
-            "default": "cache",
-            synonims: ["cache","save"]
+            "default": "dml.select",
         },
-        "default param": "none",
-        params: [],
+        input: ["waterline entity description"],
+        output: "json",
+        "default param": "collection",
+        params: [{
+            name: "collection",
+            synopsis: "Collection name. Retuns message about error when entity collection is not available",
+            type: ["string"],
+            synonims: ["collection","type","entity","from","path","where","ref","populate"],
+            "default value": "undefined"
+        }],
         example: {
-            description: "Save context into cache",
-            code: "load(\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\n    as:'json'\n)\nselect('$.metadata')\nextend()\ntranslate()\ncache()\nselect(\"$.data_id\")\n"
+            description: "Query for choose entity collection",
+            code: "select()"
         }
 
     }
-} 
+}
