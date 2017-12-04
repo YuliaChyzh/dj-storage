@@ -69,23 +69,23 @@ module.exports = {
     },
 
     help: {
-        synopsis: "Create new entity collection",
+        synopsis: "Delete selected models",
         name: {
-            "default": "ddl.create",
-            synonims: ["ddl.entity"]
+            "default": "ddl.drop",
+            synonims: ["ddl.destroy"]
         },
-        input: ["waterline model description"],
+        input: ["waterline models description"],
         output: "json",
         "default param": "model",
         params: [{
             name: "model",
-            synopsis: "Collection name. Retuns all definitions when collection name is undefined",
+            synopsis: "Models name. Retuns message about error when model name isn't found",
             type: ["string"],
-            synonims: ["model", "for"],
+            synonims: ["model", "for","entity","collection"],
             "default value": "undefined"
         }],
         example: {
-            description: "Get Definition for All Stored Collections",
+            description: "Delete selected models",
             code: "def()"
         }
 

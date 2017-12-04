@@ -69,7 +69,7 @@ module.exports = {
     },
 
     help: {
-        synopsis: "Create new entity collection",
+        synopsis: "Create new model",
         name: {
             "default": "ddl.create",
             synonims: ["ddl.entity"]
@@ -79,14 +79,14 @@ module.exports = {
         "default param": "model",
         params: [{
             name: "model",
-            synopsis: "Collection name. Retuns all definitions when collection name is undefined",
+            synopsis: "Model name. Retuns message about error when model name is doublicate",
             type: ["string"],
-            synonims: ["model", "for"],
+            synonims: ["model", "for","entity","collection"],
             "default value": "undefined"
         }],
         example: {
-            description: "Get Definition for All Stored Collections",
-            code: "def()"
+            description: "Create new model if this model doesn't exist",
+            code: "create()"
         }
 
     }
