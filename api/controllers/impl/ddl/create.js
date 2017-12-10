@@ -1,3 +1,4 @@
+//import resourses
 var fs = require('fs');
 var Promise = require("bluebird");
 
@@ -28,24 +29,24 @@ module.exports = {
     },
 
    
-
     execute: function(command, state) {
-        return new Promise((resolve, reject) => {
-            Entities
-                .findOne({name:command.settings.name.toLowerCase()})
+        return new Promise((resolve, reject) => { 
+            for item in command.settings {
+                Entities
+                .findOne({name:item.name.toLowerCase()})
                 .then((col) => {
                     if (col){
-                        reject(new DDLCreateImplError(`Doublicate '${command.settings.name}' collection`))
+                        reject(new DDLCreateImplError(`Doublicate '${item.name}' collection`))
                         return
                     }
 
-                    fs.writeFileSync(   `./api/models/${command.settings.name}.js`, 
-                                `module.exports = ${JSON.stringify(command.settings.model)}`
+                    fs.writeFileSync(   `./api/models/${item.name}.js`, 
+                                `module.exports = ${JSON.stringify(item.model)}`
                             );
                     try {
                         Entities.create({
-                            name: command.settings.name,
-                            schema: command.settings.model
+                            name: item.name,
+                            schema: item.model
                         }).then((res) => {
                             try {
                                 sails.hooks.orm.reload();
@@ -64,28 +65,29 @@ module.exports = {
                     } catch (e) {
                         reject(new DDLCreateImplError(e.toString())) 
                     }        
-                })         
+                }    
+            }
         })
     },
 
     help: {
-        synopsis: "Create new model",
+        synopsis: "Create new models",
         name: {
             "default": "ddl.create",
             synonims: ["ddl.entity"]
         },
-        input: ["waterline model description"],
+        input: ["waterline models description"],
         output: "json",
         "default param": "model",
         params: [{
             name: "model",
-            synopsis: "Model name. Retuns message about error when model name is doublicate",
+            synopsis: "Models name. Retuns message about error when model name is doublicate",
             type: ["string"],
             synonims: ["model", "for","entity","collection"],
             "default value": "undefined"
         }],
         example: {
-            description: "Create new model if this model doesn't exist",
+            description: "Create new models if this models don't exist",
             code: "create()"
         }
 

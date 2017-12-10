@@ -28,22 +28,22 @@ module.exports = {
         "ddl.destroy":"model"
     },
 
-   
 
     execute: function(command, state) {
         return new Promise((resolve, reject) => {
-            Entities
-                .findOne({name:command.settings.model.toLowerCase()})
+            for item in command.settings {
+                Entities
+                .findOne({name:item.model.toLowerCase()})
                 .then((col) => {
                     if (!col){
-                        reject(new DDLDropImplError(`Collection '${command.settings.model}' not found`))
+                        reject(new DDLDropImplError(`Collection '${item.model}' not found`))
                         return
                     }
 
-                    del(`./api/models/${command.settings.model}.js`)
+                    del(`./api/models/${item.model}.js`)
                     .then (() => {
                         try {
-                            Entities.destroy({name: command.settings.model})
+                            Entities.destroy({name: item.model})
                             .then((res) => {
                                 try {
                                     sails.hooks.orm.reload();
@@ -65,6 +65,7 @@ module.exports = {
                     })
                     .catch (e =>  reject (new DDLDropError(e.toString())))
                 })         
+            }
         })
     },
 
@@ -86,7 +87,7 @@ module.exports = {
         }],
         example: {
             description: "Delete selected models",
-            code: "def()"
+            code: "drop()"
         }
 
     }
