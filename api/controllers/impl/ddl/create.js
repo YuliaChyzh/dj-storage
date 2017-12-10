@@ -33,41 +33,41 @@ module.exports = {
         return new Promise((resolve, reject) => { 
             for item in command.settings {
                 Entities
-                .findOne({name:item.name.toLowerCase()})
-                .then((col) => {
-                    if (col){
-                        reject(new DDLCreateImplError(`Doublicate '${item.name}' collection`))
-                        return
-                    }
+                    .findOne({name:item.name.toLowerCase()})
+                    .then((col) => {
+                        if (col){
+                            reject(new DDLCreateImplError(`Doublicate '${item.name}' collection`))
+                            return
+                        }
 
-                    fs.writeFileSync(   `./api/models/${item.name}.js`, 
-                                `module.exports = ${JSON.stringify(item.model)}`
-                            );
-                    try {
-                        Entities.create({
-                            name: item.name,
-                            schema: item.model
-                        }).then((res) => {
-                            try {
-                                sails.hooks.orm.reload();
-                                state.head = {
-                                            data: res,
-                                            type: "json"
-                                         }
-                                sails.once("hook:orm:reloaded", () => {
-                                  console.log("create:hook:orm:reloaded")  
-                                  resolve(state);
-                                })
-                            } catch (e) {
-                                reject(new DDLCreateImplError(e.toString())) 
-                            }                
-                        })             
-                    } catch (e) {
-                        reject(new DDLCreateImplError(e.toString())) 
-                    }        
-                }    
-            }
-        })
+                        fs.writeFileSync(   `./api/models/${item.name}.js`, 
+                                    `module.exports = ${JSON.stringify(item.model)}`
+                                );
+                        try {
+                            Entities.create({
+                                name: item.name,
+                                schema: item.model
+                            }).then((res) => {
+                                try {
+                                    sails.hooks.orm.reload();
+                                    state.head = {
+                                                data: res,
+                                                type: "json"
+                                            }
+                                    sails.once("hook:orm:reloaded", () => {
+                                    console.log("create:hook:orm:reloaded")  
+                                    resolve(state);
+                                    })
+                                } catch (e) {
+                                    reject(new DDLCreateImplError(e.toString())) 
+                                }                
+                            })             
+                        } catch (e) {
+                            reject(new DDLCreateImplError(e.toString())) 
+                        }        
+                    }    
+                }
+            })
     },
 
     help: {
